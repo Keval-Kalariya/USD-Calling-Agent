@@ -1,0 +1,191 @@
+[
+  {
+    "id": "faq_about_usd",
+    "intent": "about_company",
+    "topic": "about_usd",
+    "keywords": ["usd", "ultimate smile design", "what is usd", "company", "who are you", "brand", "network", "designers"],
+    "content": "Ultimate Smile Design (USD) is a bespoke, premium smile transformation experience created by Master Ceramist Haresh Savani and powered by Advance Dental Export (ADE). It is a trusted network of 432+ Certified USD Smile Designers across 25+ cities in India, with over 12,000 smile transformations completed. Every smile is digitally planned around the client's facial harmony, personality, and presence.",
+    "related_topics": ["about_ade_haresh_savani", "cities_coverage", "safety_quality_materials"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 10
+  },
+  {
+    "id": "faq_ade_haresh_savani",
+    "intent": "about_founder",
+    "topic": "about_ade_haresh_savani",
+    "keywords": ["haresh savani", "haresh", "savani", "founder", "ade", "advance dental export", "master ceramist", "lab", "laboratory", "awards"],
+    "content": "Haresh Savani is a Master Ceramist, the Founder & CEO of Advance Dental Export (ADE), and creator of the Ultimate Smile Design philosophy. ADE, founded in 2009 in Surat, Gujarat, is India's leading digital dental laboratory with 750+ professionals, serving 20+ countries, with over 120,000 cases handled and multiple awards (Dental Laboratory of the Year, Charaka Award). A Master Ceramist acts as an artist who handcrafts ceramic restorations to reflect light and natural texture perfectly.",
+    "related_topics": ["about_usd", "safety_quality_materials"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 8
+  },
+  {
+    "id": "faq_safety_quality",
+    "intent": "safety_quality",
+    "topic": "safety_quality_materials",
+    "keywords": ["safe", "safety", "quality", "materials", "fda", "sterilization", "standards", "accuracy", "authentic"],
+    "content": "USD treatments use authentic, USA FDA-cleared dental materials trusted worldwide. Every case undergoes advanced digital planning and strict multi-level expert reviews by senior technicians and Haresh Savani for aesthetics, bite harmony, and function, following medical-grade sterilization standards.",
+    "related_topics": ["warranty", "veneers", "aftercare_comfort"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 9
+  },
+  {
+    "id": "faq_warranty",
+    "intent": "warranty",
+    "topic": "warranty",
+    "keywords": ["warranty", "guarantee", "lifetime", "claim", "verify", "support", "lasting", "how long do they last"],
+    "content": {
+      "en": "Ultimate Veneers come with a Lifetime Warranty (subject to terms and conditions). Treatments vary by clinic and option. For warranty verification or claims, patients can visit ultimatesmiledesign.com/verify-warranty/ or speak with our specialist warranty support team.",
+      "hi": "हमारे Ultimate Veneers के साथ Lifetime Warranty आती है (terms and conditions के अनुसार)। Warranty verification या claims के लिए आप ultimatesmiledesign.com/verify-warranty/ पर जा सकते हैं या हमारी warranty support team से बात कर सकते हैं।",
+      "gu": "Amārā Ultimate Veneers sāthe Lifetime Warranty āve che (terms and conditions anusār). Warranty verification athvā claim māṭe āp ultimatesmiledesign.com/verify-warranty/ par jay śako cho athvā amārī warranty support team sāthe vāt karī śako cho."
+    },
+    "related_topics": ["veneers", "aftercare_comfort"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 10
+  },
+  {
+    "id": "faq_veneers",
+    "intent": "treatment_info",
+    "topic": "veneers",
+    "keywords": ["veneer", "veneers", "e.max", "emax", "ceramic", "porcelain", "permanent", "irreversible", "enamel", "stain", "break", "chipped"],
+    "content": {
+      "en": "E.max veneers are ultra-thin, premium lithium disilicate ceramic shells handcrafted by Master Ceramists at ADE to improve front tooth color, shape, and size. Because a minimal amount of tooth enamel is gently reshaped, the procedure is permanent and long-lasting. They are highly stain-resistant and backed by a Lifetime Warranty.",
+      "hi": "E.max veneers ultra-thin, premium ceramic shells होते हैं जो ADE के Master Ceramists द्वारा handcraft किए जाते हैं। यह आपके front teeth की shape और color को beautifully enhance करते हैं। यह long-lasting और Highly stain-resistant होते हैं और इनके साथ Lifetime Warranty मिलती है।",
+      "gu": "E.max veneers ultra-thin, premium ceramic shells che je ADE nā Master Ceramists dvārā handcraft thāya che. Ā āpnā front teeth nī shape ane color ne enhance kare che. Ā long-lasting ane stain-resistant che ane temna sāthe Lifetime Warranty maḷe che."
+    },
+    "related_topics": ["warranty", "treatments_general", "process_timeline"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 10
+  },
+  {
+    "id": "faq_implants",
+    "intent": "treatment_info",
+    "topic": "implants",
+    "keywords": ["implant", "implants", "missing teeth", "missing tooth", "ad-implant", "screw", "replacement", "abutment"],
+    "content": "For missing teeth, USD incorporates digitally planned dental implants and implant-supported crowns using ADE's custom AD-Implant system. They restore chewing function, facial balance, and provide a stable, natural-looking permanent replacement.",
+    "related_topics": ["treatments_general", "process_timeline", "cost_value"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 9
+  },
+  {
+    "id": "faq_whitening",
+    "intent": "treatment_info",
+    "topic": "whitening",
+    "keywords": ["whitening", "whiten", "white", "bleached", "brighten", "yellow", "stain", "coffee", "smoking", "discolored"],
+    "content": "USD provides professional teeth whitening to safely eliminate stubborn stains caused by coffee, tea, smoking, or aging. Your Certified Smile Designer can evaluate whether professional whitening alone is perfect or if combining it with veneers offers the ideal result.",
+    "related_topics": ["treatments_general", "veneers"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 7
+  },
+  {
+    "id": "faq_treatments_general",
+    "intent": "treatment_info",
+    "topic": "treatments_general",
+    "keywords": ["concerns", "fix", "gummy", "crooked", "gaps", "braces", "orthodontic", "crown", "crowns", "difference", "wedding", "event"],
+    "content": "USD solves stained, chipped, worn, gapped, mildly crooked teeth (often without braces!), missing teeth, and gummy smiles (using custom digital surgical guides). While veneers are thin ceramic shells solely covering the front cosmetic surface, crowns encase the whole tooth for structural strength. Ideal for major life events like weddings or interviews, starting 6-8 weeks in advance.",
+    "related_topics": ["veneers", "implants", "whitening", "preview_ai_digital"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 9
+  },
+  {
+    "id": "faq_preview",
+    "intent": "preview_options",
+    "topic": "preview_ai_digital",
+    "keywords": ["preview", "see before", "virtual", "ai", "try-on", "try on", "selfie", "digital smile design", "simulation", "photo"],
+    "content": {
+      "en": "You can see your new smile before treatment in two ways: 1) AI Smile Preview (free, private 30-second simulation on your selfie at ultimatesmiledesign.com/virtual-smile-try-on/), and 2) Digital Smile Design during consultation, where your dentist creates an interactive 3D digital preview from facial scans for your explicit approval before any physical treatment starts.",
+      "hi": "Treatment से पहले आप अपनी smile 2 तरीकों से देख सकते हैं: 1) AI Smile Preview (ultimatesmiledesign.com/virtual-smile-try-on/ पर 30 seconds में free selfie test), और 2) Consultation के दौरान Digital Smile Design, जहाँ dentist आपके facial scans से treatment से पहले interactive preview तैयार करते हैं।",
+      "gu": "Treatment pahelāṃ āp 2 rīte smile joi śako cho: 1) AI Smile Preview (ultimatesmiledesign.com/virtual-smile-try-on/ par 30 seconds māṃ free selfie simulation), ane 2) Consultation daramyān Digital Smile Design, jyamāṃ dentist treatment pahelāṃ facial scan thī custom preview banāve che."
+    },
+    "related_topics": ["process_timeline", "contact_booking"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 9
+  },
+  {
+    "id": "faq_process_timeline",
+    "intent": "timeline_process",
+    "topic": "process_timeline",
+    "keywords": ["process", "timeline", "how long", "duration", "appointments", "visits", "weeks", "months", "consultation", "steps"],
+    "content": {
+      "en": "The process begins with a Smile Discovery Consultation involving oral assessment, digital imaging, and customized planning—no treatment occurs without your full approval of the digital preview. Timelines: Simple cases (whitening, minor veneers) take 2-3 visits over 2-4 weeks; Moderate cases take 6-12 weeks; Complex implant or full-mouth rehab cases may take 4-6 months.",
+      "hi": "Treatment process consultation और digital imaging से शुरू होता है—आपकी explicit approval के बिना कुछ भी start नहीं होता। Simple cases (veneers, whitening) में 2 से 4 हफ्ते और 2-3 visits लगते हैं। Moderate cases में 6-12 हफ्ते, और complex implant cases में 4-6 महीने तक लग सकते हैं।",
+      "gu": "Treatment process consultation ane digital imaging thī śarū thāya che—āpnī approval vadana koipan kam start nathī thatu. Simple cases māṃ 2-3 visits (2-4 athaḍiyāṃ) lāge che. Moderate cases māṃ 6-12 athaḍiyāṃ, ane complex implant cases māṃ 4-6 mahinā lāgī śake che."
+    },
+    "related_topics": ["preview_ai_digital", "aftercare_comfort"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 10
+  },
+  {
+    "id": "faq_cities_coverage",
+    "intent": "location_coverage",
+    "topic": "cities_coverage",
+    "keywords": ["city", "cities", "location", "where", "mumbai", "ahmedabad", "surat", "delhi", "bangalore", "pune", "rajkot", "jamnagar", "vadodara", "indore", "hyderabad", "chennai", "gurugram"],
+    "content": {
+      "en": "Ultimate Smile Design operates through a network of 432+ Certified Smile Designers across 25+ cities in India including Ahmedabad, Surat, Rajkot, Jamnagar, Mumbai, Delhi, Bangalore, Hyderabad, Chennai, Pune, Indore, Gurugram, and Vadodara. Tell us your city and we will connect you with the nearest certified specialist.",
+      "hi": "Ultimate Smile Design के India के 25+ cities में 432+ Certified Smile Designers हैं, जिनमें Ahmedabad, Surat, Rajkot, Jamnagar, Mumbai, Delhi, Bangalore, Hyderabad, Chennai, Pune, Indore, और Vadodara शामिल हैं। हमें अपना city बताइए और हम आपको nearest specialist से connect कर देंगे।",
+      "gu": "Ultimate Smile Design nā India nā 25+ cities māṃ 432+ Certified Smile Designers che, jyamāṃ Ahmedabad, Surat, Rajkot, Jamnagar, Mumbai, Delhi, Bangalore, Hyderabad, Pune, Indore ane Vadodara samāveś che. Tame kyo city māṃ cho e kahī do amey near specialist sāthe connect karī devu."
+    },
+    "related_topics": ["contact_booking", "about_usd"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 10
+  },
+  {
+    "id": "faq_cost_value",
+    "intent": "cost_pricing",
+    "topic": "cost_value",
+    "keywords": ["cost", "price", "pricing", "quote", "expensive", "affordable", "cheap", "investment", "how much", "rate", "fees"],
+    "content": {
+      "en": "Smile Design investment depends on your personalised treatment plan, clinic location, and complexity — composite options are generally more affordable than full ceramic veneers. While exact phone quotes cannot be given without clinical evaluation, your Certified Smile Designer provides transparent, exact estimates after consultation. Think of it as a personal investment in your brand and confidence that appreciates forever, backed by a Lifetime Warranty.",
+      "hi": "Smile Design की cost clinic, city और personalised treatment plan पर निर्भर करती है। Composite options ceramic veneers से ज़्यादा affordable होते हैं। बिना evaluation के exact phone quote नहीं दी जा सकती, लेकिन consultation के बाद transparent estimate मिलता है। यह आपके personal confidence और presence में एक lifetime appreciating investment है।",
+      "gu": "Smile Design nī cost clinic, city ane treatment plan par ādhārita che. Composite options ceramic veneers kartāṃ vadhāre affordable hoy che. Phone par exact quote nathī āpī śaktu, parantu consultation pachhī transparent estimate maḷe che. Ā āpnā personal confidence māṃ ek lifetime investment che."
+    },
+    "related_topics": ["process_timeline", "contact_booking", "warranty"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 10
+  },
+  {
+    "id": "faq_aftercare_comfort",
+    "intent": "comfort_aftercare",
+    "topic": "aftercare_comfort",
+    "keywords": ["pain", "painful", "hurt", "comfortable", "scared", "fear", "eat", "eating", "food", "follow-up", "care", "permanent"],
+    "content": "Most clients are delighted by how exceptionally comfortable and virtually painless the USD experience is, using gentle care and modern minimally invasive precision. After a short recommended healing period, you can confidently enjoy all your favorite foods. Follow-up check-ups ensure your bite is balanced and long-term results are preserved.",
+    "related_topics": ["process_timeline", "warranty"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 8
+  },
+  {
+    "id": "faq_privacy_busy",
+    "intent": "privacy_scheduling",
+    "topic": "privacy_busy_schedule",
+    "keywords": ["privacy", "private", "discreet", "discretion", "confidential", "vip", "celebration", "busy", "schedule", "time", "calendar", "high profile"],
+    "content": "Privacy is foundational at USD. Records, consultations, and photographs are handled with absolute discretion, catering to high-profile business leaders and professionals. For demanding calendars, our focused 30-45 minute consultations and digital planning minimize chair time and adapt seamlessly to busy schedules.",
+    "related_topics": ["contact_booking", "preview_ai_digital"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 8
+  },
+  {
+    "id": "faq_contact_booking",
+    "intent": "contact_booking",
+    "topic": "contact_booking",
+    "keywords": ["book", "booking", "contact", "appointment", "phone", "number", "email", "website", "address", "where to apply", "how to start"],
+    "content": "To book an appointment or consultation, visit ultimatesmiledesign.com, call directly at +91 84 69 88 88 77 (+1 551-380-0385 from overseas), or email info@advancedentalexport.com. Our team will promptly organize a complimentary Smile Discovery Consultation with the nearest Certified USD Smile Designer in your city.",
+    "related_topics": ["cities_coverage", "preview_ai_digital"],
+    "source": "verified_faq_v1",
+    "language": "multi",
+    "priority": 10
+  }
+]

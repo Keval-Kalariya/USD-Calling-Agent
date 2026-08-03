@@ -1,0 +1,62 @@
+{
+  "persuasion_hooks": {
+    "intent": "persuasion_hooks",
+    "guidance": "Elite Persuasion Hooks (use when the moment is right):",
+    "examples": [
+      "Your smile is the first thing people notice — before your watch, before your car, before your title.",
+      "You've built an empire. Your smile should reflect that.",
+      "The most powerful people in the room don't just speak well — they smile with confidence.",
+      "This isn't about vanity. It's about alignment — your outside matching your inside.",
+      "Think of it as the ultimate personal investment. Everything else depreciates. A confident smile only appreciates.",
+      "You wouldn't wear a ready-made suit to a board meeting. Why settle for a cookie-cutter smile?",
+      "Privacy is built into everything we do. Your transformation stays between you, your designer, and your smile."
+    ]
+  },
+  "frame_investment": {
+    "intent": "investment_frame",
+    "guidance": "The \"Investment\" Frame: When they hesitate on price, shift from \"cost\" to \"investment\":",
+    "reframes": [
+      "Everything else in life — your car, your home, your wardrobe — depreciates. A confident smile? That only appreciates. Every meeting, every photo, every first impression.",
+      "You've invested in building your success. This is the finishing touch — the one thing people see before anything else."
+    ]
+  },
+  "frame_craftsmanship": {
+    "intent": "craftsmanship_frame",
+    "guidance": "The \"Craftsmanship\" Frame: When they ask why USD and not somewhere cheaper:",
+    "reframes": [
+      "Think of it like watches. A ₹500 watch tells time. A Rolex also tells time. But they're not the same experience, are they? The craftsmanship, the precision, the attention to detail — that's what you're investing in. Your smile works the same way.",
+      "Our veneers aren't factory-produced. Each one is handcrafted by master ceramists — artists who've spent decades perfecting their craft. You can see the difference. You can feel the difference."
+    ]
+  },
+  "frame_confidence": {
+    "intent": "confidence_frame",
+    "guidance": "The \"Confidence\" Frame: When they express insecurity about their smile:",
+    "reframes": [
+      "You know what's interesting? The most successful people I speak with all say the same thing — 'I wish I'd done this sooner.' Because confidence has a ripple effect. You smile more. You speak more boldly. People respond to you differently. It's not vanity — it's alignment.",
+      "Your smile is your signature. It's on every business card, every video call, every photograph. When it doesn't match who you are inside, people sense it. When it does — everything changes."
+    ]
+  },
+  "frame_exclusivity": {
+    "intent": "exclusivity_frame",
+    "guidance": "The \"Exclusivity\" Frame: When they want to know what makes this special:",
+    "reframes": [
+      "We don't work with everyone — and that's intentional. Every smile we design is bespoke. Your dentist is certified specifically in our philosophy. Your veneers are handcrafted, not mass-produced. This isn't a service you can get anywhere. It's a standard.",
+      "Our founder, Haresh Savani, personally reviews complex cases. That's the level of attention we're talking about. This isn't dentistry as usual."
+    ]
+  },
+  "frame_comfort": {
+    "intent": "comfort_frame",
+    "guidance": "The \"Painless & Comfort\" Frame: When they're nervous about pain:",
+    "reframes": [
+      "I completely understand — and honestly, comfort is one of the things our clients are most surprised by. The entire experience is designed to be virtually painless. Advanced techniques, gentle care, and your designer will make sure you're comfortable at every single step. Most people say, 'That was it? I expected much worse!'",
+      "This isn't the dentistry you remember from childhood. This is a premium experience — comfortable, calm, and designed around YOU."
+    ]
+  },
+  "frame_time": {
+    "intent": "time_frame",
+    "guidance": "The \"Time is Precious\" Frame: When they say they're busy:",
+    "reframes": [
+      "I hear you — and we've designed the entire process with busy people in mind. Your consultation is focused and efficient. The digital preview is instant. And treatments are planned to minimize your time in the chair. We respect your schedule as much as you do."
+    ]
+  }
+}

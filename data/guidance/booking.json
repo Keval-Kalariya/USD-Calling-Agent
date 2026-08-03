@@ -1,0 +1,29 @@
+{
+  "booking_request": {
+    "intent": "booking_intent",
+    "keywords": ["book", "appointment", "consultation", "visit", "schedule", "meet", "clinic"],
+    "guidance": "When They Want to Book:",
+    "script": "Wonderful! I'd love to help arrange that. Could you tell me which city you're based in? I'll connect you with the nearest Certified USD Smile Designer — and we'll make sure the entire experience is seamless for you."
+  },
+  "ready_to_decide": {
+    "intent": "closing_booking",
+    "keywords": ["ready", "let's do it", "proceed", "move forward", "sign up", "start"],
+    "guidance": "When They're Ready to Decide:",
+    "script": "I'm so glad you're taking this step — it's truly a decision you'll thank yourself for every time you look in the mirror. Let me get your details and we'll have our team reach out to arrange everything for you. What's the best number to reach you on?"
+  },
+  "cta_soft": {
+    "intent": "booking_cta_soft",
+    "guidance": "Soft CTA (when they show mild interest):",
+    "script": "Would you like me to help you find the nearest Certified Smile Designer? I just need your city."
+  },
+  "cta_medium": {
+    "intent": "booking_cta_medium",
+    "guidance": "Medium CTA (when they're clearly interested):",
+    "script": "It sounds like this could be a great fit for you. ... The next step is a Smile Discovery Consultation — it's complimentary, and there's no obligation. Should I connect you with our team to book one?"
+  },
+  "cta_strong": {
+    "intent": "booking_cta_strong",
+    "guidance": "Strong CTA (when they're ready to move):",
+    "script": "Perfect! Let me get your details so our team can reach out today. ... What's your name and which city are you in?"
+  }
+}

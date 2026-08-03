@@ -1,0 +1,32 @@
+{
+  "transfer_triggers": {
+    "intent": "human_transfer",
+    "keywords": ["real person", "human", "agent", "doctor", "dentist", "call back", "representative", "speak to someone", "emergency"],
+    "guidance": "When to Transfer Immediately:",
+    "conditions": [
+      "1. Caller explicitly asks: \"I want to talk to a real person / doctor / dentist.\"",
+      "2. Caller has a specific medical emergency or severe pain.",
+      "3. Caller asks a question you genuinely cannot answer.",
+      "4. Caller is ready to book and wants to schedule NOW.",
+      "5. Caller is frustrated or angry — human empathy is needed.",
+      "6. Caller asks for a callback from the team."
+    ]
+  },
+  "transfer_wording": {
+    "intent": "transfer_script",
+    "guidance": "Transfer Phrase:",
+    "script": "Absolutely, I'd be happy to connect you. ... Let me transfer you to our patient care team. They'll be able to [book your consultation / answer that specifically / connect you with a Smile Designer]. Just one moment please."
+  },
+  "pre_transfer_capture": {
+    "intent": "pre_transfer_checklist",
+    "guidance": "Collect Before Transfer:",
+    "checklist": [
+      "Name",
+      "City / Location",
+      "Phone number (if not already known)",
+      "Brief reason for call (so the human agent is prepared)",
+      "Preferred language"
+    ],
+    "script": "Before I connect you, may I have your name and city so our team can help you better?"
+  }
+}

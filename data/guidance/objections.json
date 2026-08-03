@@ -1,0 +1,75 @@
+{
+  "price_objection": {
+    "intent": "price_objection",
+    "keywords": ["expensive", "too much", "cost", "price", "cheaper", "money", "budget", "afford"],
+    "guidance": "Never defend price. Reframe:",
+    "reframe": "I completely understand — and honestly, the fact that you're asking tells me you take this seriously. What I can tell you is that this isn't just a dental procedure — it's a bespoke smile crafted by master artisans with a Lifetime Warranty. You've invested in the best in every area of your life. Your smile deserves the same."
+  },
+  "pain_fear": {
+    "intent": "pain",
+    "keywords": ["hurt", "pain", "scared", "fear", "anxious", "painful", "needle", "drill", "comfort"],
+    "guidance": "When caller says 'I'm scared it will hurt':",
+    "reframe": "That's completely natural — and I want you to know, comfort is our top priority. Your designer uses advanced techniques to make the experience virtually painless. Most of our clients say it was far more comfortable than they expected. We can start with a no-pressure consultation — just a conversation, nothing more."
+  },
+  "trust_uncertainty": {
+    "intent": "trust",
+    "keywords": ["trust", "don't like it", "not sure", "what if", "guarantee", "risk", "fake"],
+    "guidance": "When caller says 'I don't trust it / What if I don't like it?':",
+    "reframe": "Absolutely valid — and that's exactly why we do things differently. Before any treatment begins, you'll see a digital preview of your new smile. You approve it, you refine it, and only then do we proceed. You're in control at every step. Plus, our Lifetime Warranty means we stand behind our work — permanently."
+  },
+  "teeth_are_fine": {
+    "intent": "necessity",
+    "keywords": ["fine", "healthy", "don't need", "already good", "why bother", "nothing wrong"],
+    "guidance": "When caller says 'My teeth are fine':",
+    "reframe": "And they probably are! But here's the thing — healthy teeth and a beautiful smile aren't always the same. Think of it like having a great body but wearing the wrong fit. Your teeth can be perfectly healthy, but if the smile doesn't match your face, your personality, your presence... it's like wearing a suit that doesn't quite fit. Would you like to see what a smile designed specifically for YOU could look like?"
+  },
+  "no_time": {
+    "intent": "time_objection",
+    "keywords": ["time", "busy", "schedule", "hectic", "work", "travel", "no time", "quick"],
+    "guidance": "When caller says 'I don't have time':",
+    "reframe": "I hear you — and that's exactly why we've designed the process to be seamless. Your consultation takes about 30-45 minutes. The digital preview is instant. And the actual treatment is planned so efficiently that most clients fit it around their busy schedules without disruption. We respect your time as much as you do."
+  },
+  "regular_dentist_preference": {
+    "intent": "competitor_dentist",
+    "keywords": ["regular dentist", "my doctor", "my dentist", "family dentist", "local dentist"],
+    "guidance": "When caller says 'I'll just go to my regular dentist':",
+    "reframe": "Your regular dentist is great for routine care — absolutely. But smile design is a different discipline altogether. It's like the difference between a tailor who alters clothes and a bespoke designer who creates from scratch. Our Certified Smile Designers are trained specifically in this philosophy — planning the entire smile around your face, not just individual teeth."
+  },
+  "real_results_proof": {
+    "intent": "social_proof",
+    "keywords": ["real results", "before and after", "proof", "photos", "instagram", "examples", "see"],
+    "guidance": "When caller asks 'Can I see real results?':",
+    "reframe": "Of course! You can see real before-and-after transformations on our website and Instagram (@ultimate_smile_design). We've helped over 12,000 people — business leaders, professionals, people who value the best. And our AI Smile Preview lets you see YOUR potential smile on your own selfie — no commitment, just 30 seconds."
+  },
+  "hesitation_think_about_it": {
+    "intent": "hesitation",
+    "keywords": ["think about it", "maybe later", "not right now", "reconsider", "deciding"],
+    "guidance": "When caller says 'I need to think about it', provide the reframe and then address whichever concern they name:",
+    "reframe": "Of course, take your time. ... Can I ask — is there something specific you're unsure about? Is it the investment, the process, or just timing?"
+  },
+  "call_back_later": {
+    "intent": "callback",
+    "keywords": ["call back", "will contact you", "hang up", "later", "reach out later"],
+    "guidance": "When caller says 'I'll call back', provide the reframe and always try to capture their number before they hang up:",
+    "reframe": "No problem at all. ... Just so you know, I can have one of our team members send you some information over WhatsApp — no pressure, just details you can look at when you have time. Would that help?"
+  },
+  "cheaper_local_option": {
+    "intent": "price_competition",
+    "keywords": ["cheaper somewhere else", "local dentist is cheaper", "discount", "another clinic"],
+    "guidance": "When caller says 'My local dentist said he can do it cheaper': NEVER badmouth another dentist. Always be respectful.",
+    "reframe": "That's fair — and I'm sure your dentist does great work. ... The difference with USD is that you're not just getting veneers. You're getting a full smile design plan created by a team of dentists AND Master Ceramists who study your face, your expressions, and your personality before anything is made. ... It's like the difference between a good tailor and a bespoke designer. Would you like me to explain how that works?"
+  },
+  "elite_pain_points_reference": {
+    "intent": "pain_points",
+    "guidance": "Elite Pain Points (what keeps them up at night):",
+    "examples": [
+      "My smile doesn't match my success",
+      "I avoid cameras at important events",
+      "People judge me by my smile before my resume",
+      "I've invested in everything else — why not my smile?",
+      "I want the best, not just good enough",
+      "I don't have time for multiple failed attempts",
+      "Privacy matters — I don't want anyone to know"
+    ]
+  }
+}

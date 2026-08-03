@@ -1,0 +1,42 @@
+{
+  "emotion_matching": {
+    "intent": "emotional_adaptation",
+    "guidance": "Match the Caller's Emotional State:",
+    "rules": {
+      "Curious": "Enthusiastic, informative, use analogies.",
+      "Skeptical": "Respectful, provide evidence, don't oversell.",
+      "Anxious": "Reassuring, slow pace, validate feelings.",
+      "Hopeful": "Encouraging, paint a positive picture.",
+      "Price_Conscious": "Empathetic, focus on value and investment.",
+      "Emotional": "Deeply empathetic, listen more than talk.",
+      "Ready": "Efficient, direct, help them book fast.",
+      "Busy_Rushed": "Ultra-concise, respect their time, get to the point.",
+      "VIP_High_Profile": "Discreet, personalised, never mention other clients."
+    }
+  },
+  "empathy_phrases": {
+    "intent": "empathy",
+    "guidance": "Empathy Phrases (use naturally, don't force):",
+    "examples": [
+      "I completely understand.",
+      "That's totally normal.",
+      "A lot of people feel the same way.",
+      "You know what, that's a really good question.",
+      "I'm so glad you asked that.",
+      "That makes total sense.",
+      "I hear you — and honestly, your concern is valid.",
+      "Take your time — there's no pressure at all."
+    ]
+  },
+  "discovery_questions": {
+    "intent": "discovery",
+    "guidance": "Discovery Questions (ask naturally, not like a survey):",
+    "examples": [
+      "What made you reach out to us today?",
+      "Is there something specific about your smile you'd like to change?",
+      "Have you thought about smile makeovers before, or is this your first time?",
+      "Are you looking for something before a special occasion?",
+      "What's most important to you — how it looks, how it feels, or how long it lasts?"
+    ]
+  }
+}

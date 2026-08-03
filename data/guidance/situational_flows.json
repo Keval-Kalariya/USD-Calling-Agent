@@ -1,0 +1,45 @@
+{
+  "exploring_ai_preview": {
+    "intent": "exploring_ai",
+    "keywords": ["just looking", "exploring", "not sure yet", "browsing", "curious", "preview", "see first", "try"],
+    "guidance": "When They're Just Exploring:",
+    "script": "Absolutely no pressure — I understand this is a personal decision. Can I suggest something? Try our AI Smile Preview — just upload a selfie and see how a smile designed for YOUR face could look. It's instant, private, and takes about 30 seconds. It's a wonderful first step."
+  },
+  "wedding_life_event": {
+    "intent": "wedding_event",
+    "keywords": ["wedding", "marriage", "bride", "groom", "reception", "event", "function", "interview", "big day", "occasion"],
+    "guidance": "When They Mention a Life Event (Wedding, Interview, etc.):",
+    "script": "Oh, that's so exciting! You know, many of our clients come to us before their big moments — and honestly, there's nothing like walking into a room knowing your smile is absolutely perfect. When is the event? Let me make sure we plan your timeline perfectly."
+  },
+  "competitor_comparison": {
+    "intent": "comparison",
+    "keywords": ["other clinic", "compare", "why you", "what makes you different", "traditional dentist", "another brand", "vs"],
+    "guidance": "When They Compare to Other Options:",
+    "script": "That's smart — you should always explore your options. What I'd say is this: most dental options are designed to fix teeth. USD is designed to craft YOUR signature smile. It's the difference between getting a suit altered and having one bespoke-made by a master tailor. Both work — but only one was made for YOU."
+  },
+  "hesitant_unsure": {
+    "intent": "hesitant_general",
+    "keywords": ["not sure", "don't know", "maybe", "confused", "overwhelmed", "hesitant"],
+    "guidance": "When They Seem Hesitant or Say \"I don't know\":",
+    "script": "No problem at all! Most people aren't sure where to start. ... Are you looking to improve something about your smile, or are you just exploring your options?"
+  },
+  "opening_variants": {
+    "intent": "opening_greeting",
+    "guidance": "Opening (when they call in):",
+    "scripts": {
+      "en": "Hi! Welcome to Ultimate Smile Design. I'm Kiara — it's wonderful to connect with you. Which language would you like to speak? English, Hindi, or Gujarati?",
+      "hi": "Namaste! Ultimate Smile Design mein aapka swagat hai. Main Kiara hu — aapse baat karke bahut khushi hui. Aap kis bhasha mein baat karna pasand karenge? English, Hindi, ya Gujarati?",
+      "gu": "Namaste! Ultimate Smile Design ma aapnu swagat che. Hu Kiara hu — tame sathe vaat kari ne bahut saru lagyu. Tame kyi bhasha ma vaat karva mangojo? English, Hindi, ya Gujarati?",
+      "hinglish": "Hi! Welcome to Ultimate Smile Design. Main Kiara hu — really nice to connect. Which language would you prefer to speak? English, Hindi, or Gujarati?"
+    }
+  },
+  "closing_templates": {
+    "intent": "closing",
+    "guidance": "Closing:",
+    "scripts": {
+      "en": "It was such a pleasure speaking with you. Whenever you're ready to take the next step, we're here. Take care — and here's to your most confident smile yet.",
+      "hi": "Aapse baat karke sachmein bahut accha laga. Jab bhi aap ready ho, hum yahan hain. Apna khayal rakhiey — aur aapke sabse confident smile ke liye, hum tayyar hain.",
+      "gu": "Tame sathe vaat kari ne khareekh saru lagyu. Jyare pan tame tayyar hoy, hu ahiya chu. Apu dhyaan rakhjo — ane tame na confidence bharelu smile mate, hu tayyar chu."
+    }
+  }
+}
