@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-3.6-flash"
     GEMINI_TTS_MODEL: str = "models/gemini-3.1-flash-tts-preview"
-    GEMINI_TTS_VOICE: str = "Puck"
+    GEMINI_TTS_VOICE: str = "Kore"
     GEMINI_TTS_TIMEOUT: float = 10.0
     TTS_PROVIDER: str = "elevenlabs"
 

@@ -92,6 +92,8 @@ class VoicePipelineOrchestrator:
         self._stt_final_received: asyncio.Event = asyncio.Event()
         self._is_running: bool = False
         self._stopped: bool = False
+        self.barge_in_frame_threshold: int = 15  # ~300ms sustained VAD speech onset threshold to prevent speaker echo false triggers
+        self._barge_in_speech_frames: int = 0
 
     def _on_stt_transcript(self, text: str, is_final: bool) -> None:
         """Callback invoked whenever Deepgram emits a partial or final transcript."""
@@ -101,6 +103,59 @@ class VoicePipelineOrchestrator:
                 self._stt_final_received.set()
                 # If VAD speech already ended and no turn trigger task is active, check if we should trigger turn
                 if not self.vad_client.is_speaking and (self._turn_trigger_task is None or self._turn_trigger_task.done()):
+                    self._turn_trigger_task = asyncio.create_task(self._wait_and_trigger_turn())
+        elif self.session.state in ("speaking", "thinking"):
+            # Word-level confidence barge-in check to catch interruption while assistant speaks
+            clean_text = text.strip()
+            word_count = len(clean_text.split())
+            if (is_final and len(clean_text) >= 3) or (word_count >= 2 and self.vad_client.is_speaking):
+                asyncio.create_task(self._confirm_barge_in(reason=f"STT confidence interruption ('{clean_text[:30]}')", initial_text=clean_text, is_final=is_final))
+
+    async def _confirm_barge_in(self, reason: str, initial_text: Optional[str] = None, is_final: bool = False) -> None:
+        """
+        Executes immediate production-grade barge-in cancellation when caller interruption is confirmed.
+        Halts generative loops, dumps Twilio playback buffer via WebSocket clear event, and restores listening state.
+        """
+        if self.session.state == "listening" or self._stopped:
+            return  # Turn already ended or call stopped
+            
+        print(f"[Orchestrator] Barge-in confirmed ({reason})! Cancelling active assistant turn and clearing Twilio playback buffer.")
+        self._barge_in_speech_frames = 0
+        
+        # 1. Immediately cancel active turn generation and TTS streaming tasks
+        if self._active_turn_task and not self._active_turn_task.done():
+            self._active_turn_task.cancel()
+        if self._turn_trigger_task and not self._turn_trigger_task.done():
+            self._turn_trigger_task.cancel()
+            
+        # 2. Flush all pending items from TTS sentence queue
+        while not self.session.tts_queue.empty():
+            try:
+                self.session.tts_queue.get_nowait()
+            except asyncio.QueueEmpty:
+                break
+                
+        # 3. Send Twilio Media Streams 'clear' event to empty playback audio buffer instantaneously
+        if self.websocket and not getattr(self.websocket, "client_state", None) == "DISCONNECTED":
+            try:
+                await self.websocket.send_text(json.dumps({
+                    "event": "clear",
+                    "streamSid": self.stream_sid
+                }))
+                print(f"[Orchestrator] Sent Twilio 'clear' event to immediately dump cellular audio buffer for StreamSid: {self.stream_sid}")
+            except Exception as e:
+                print(f"[Orchestrator Warning] Failed to send Twilio clear event during barge-in: {e}")
+
+        # 4. Transition session back to listening state and reset synchronization flags
+        self.session.transition_state("listening")
+        self._stt_final_received.clear()
+        
+        # 5. Continue capturing caller's interrupting speech without restarting call session
+        if initial_text:
+            self.session.append_stt_fragment(initial_text, is_final=is_final)
+            if is_final and not self.vad_client.is_speaking:
+                self._stt_final_received.set()
+                if self._turn_trigger_task is None or self._turn_trigger_task.done():
                     self._turn_trigger_task = asyncio.create_task(self._wait_and_trigger_turn())
 
     def _on_dg_unexpected_disconnect(self) -> None:
@@ -162,30 +217,35 @@ class VoicePipelineOrchestrator:
         # Send raw ulaw audio directly to Deepgram STT stream
         await self.dg_client.send_audio(audio_bytes)
 
-        # In Step 6, to avoid self-interruption or speaker acoustic feedback without full barge-in guards,
-        # we only monitor VAD turn transitions while in the "listening" state
-        if self.session.state != "listening":
-            return
-
         pcm_bytes = mulaw_to_pcm16(audio_bytes)
         vad_events = self.vad_client.process_audio(pcm_bytes)
         
-        for event in vad_events:
-            if event == "speech_started":
-                # Speech onset detected while listening: user is speaking or resumed speaking
-                if self._turn_trigger_task and not self._turn_trigger_task.done():
-                    print("[Orchestrator] Speech resumed before turn triggered. Cancelling turn wait task.")
-                    self._turn_trigger_task.cancel()
-                    try:
-                        await self._turn_trigger_task
-                    except (asyncio.CancelledError, Exception):
-                        pass
-                    self._turn_trigger_task = None
-                self._stt_final_received.clear()
-            elif event == "speech_ended":
-                print("[Orchestrator] VAD speech_ended detected. Waiting for Deepgram final transcript before triggering LLM...")
-                if self._turn_trigger_task is None or self._turn_trigger_task.done():
-                    self._turn_trigger_task = asyncio.create_task(self._wait_and_trigger_turn())
+        if self.session.state == "listening":
+            self._barge_in_speech_frames = 0
+            for event in vad_events:
+                if event == "speech_started":
+                    # Speech onset detected while listening: user is speaking or resumed speaking
+                    if self._turn_trigger_task and not self._turn_trigger_task.done():
+                        print("[Orchestrator] Speech resumed before turn triggered. Cancelling turn wait task.")
+                        self._turn_trigger_task.cancel()
+                        try:
+                            await self._turn_trigger_task
+                        except (asyncio.CancelledError, Exception):
+                            pass
+                        self._turn_trigger_task = None
+                    self._stt_final_received.clear()
+                elif event == "speech_ended":
+                    print("[Orchestrator] VAD speech_ended detected. Waiting for Deepgram final transcript before triggering LLM...")
+                    if self._turn_trigger_task is None or self._turn_trigger_task.done():
+                        self._turn_trigger_task = asyncio.create_task(self._wait_and_trigger_turn())
+        elif self.session.state in ("speaking", "thinking"):
+            # Continuous VAD monitoring for telephony barge-in while assistant speaks
+            if self.vad_client.is_speaking:
+                self._barge_in_speech_frames += 1
+                if self._barge_in_speech_frames >= getattr(self, "barge_in_frame_threshold", 15):
+                    await self._confirm_barge_in(reason=f"Sustained VAD speech onset ({self._barge_in_speech_frames} frames)")
+            else:
+                self._barge_in_speech_frames = 0
 
     async def _wait_and_trigger_turn(self) -> None:
         """
@@ -193,15 +253,15 @@ class VoicePipelineOrchestrator:
         after speech ends, guaranteeing complete sentences before calling the LLM.
         """
         try:
-            # Wait up to 800ms for Deepgram to send a final transcript if it hasn't already arrived
+            # Wait up to 350ms for Deepgram to send a final transcript if it hasn't already arrived
             if not self._stt_final_received.is_set():
                 try:
-                    await asyncio.wait_for(self._stt_final_received.wait(), timeout=0.8)
+                    await asyncio.wait_for(self._stt_final_received.wait(), timeout=0.35)
                 except (TimeoutError, asyncio.TimeoutError):
-                    print("[Orchestrator] Timeout waiting for Deepgram is_final. Proceeding with buffered transcript.")
-            
-            # Additional tiny grace period (50ms) to ensure any trailing network packets or multi-channel text are merged
-            await asyncio.sleep(0.05)
+                    print("[Orchestrator] Timeout (350ms) waiting for Deepgram is_final. Proceeding with buffered transcript.")
+                    # Tiny grace settle (15ms) only when relying on unconfirmed interim buffer
+                    await asyncio.sleep(0.015)
+            # When is_final arrived cleanly, skip artificial delays to trigger LLM instantaneously
             
             # Ensure user did not resume speaking and STT connection is active during the wait
             if self.vad_client.is_speaking or not self._is_running or self.session.state != "listening" or not self.dg_client._is_connected:

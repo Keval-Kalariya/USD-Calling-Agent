@@ -9,10 +9,27 @@ class DeepgramStreamClient:
     Configured by default to accept 8kHz μ-law audio to match Twilio's payload exactly,
     eliminating the need for transcoding. Includes an automatic reconnection watchdog.
     """
-    def __init__(self, sample_rate: int = 8000, encoding: str = "mulaw", language: str = "multi", on_transcript=None, on_unexpected_disconnect=None, on_reconnect=None):
+    def __init__(self, sample_rate: int = 8000, encoding: str = "mulaw", language: str = "multi", keywords: list[str] | None = None, on_transcript=None, on_unexpected_disconnect=None, on_reconnect=None):
         self.sample_rate = sample_rate
         self.encoding = encoding
         self.language = language
+        self.keywords = keywords or [
+            "Ultimate Smile Design:5",
+            "USD:5",
+            "Advance Dental Export:4",
+            "Kiara:5",
+            "Gujarati:5",
+            "Hindi:5",
+            "English:5",
+            "Ahmedabad:5",
+            "Surat:5",
+            "Mumbai:5",
+            "Veneers:4",
+            "Laminates:4",
+            "Aligners:4",
+            "Smile Designer:5",
+            "Smile Discovery Consultation:5",
+        ]
         self.on_transcript = on_transcript
         self.on_unexpected_disconnect = on_unexpected_disconnect
         self.on_reconnect = on_reconnect
@@ -64,14 +81,17 @@ class DeepgramStreamClient:
     async def connect(self):
         """Starts the WebSocket connection with the given options."""
         options = LiveOptions(
-            model="nova-2",
+            model="nova-3",
             language=self.language,
             smart_format=True,
             encoding=self.encoding,
             sample_rate=self.sample_rate,
             interim_results=True,
-            endpointing=300
+            endpointing=300,
         )
+        # Adapt existing keyword boosting for Nova-3 Keyterm Prompting (plain strings without intensifiers)
+        if self.keywords:
+            setattr(options, "keyterm", [k.split(":")[0] for k in self.keywords])
         
         if await self.dg_connection.start(options) is False:
             raise ConnectionError("Failed to connect to Deepgram streaming API")

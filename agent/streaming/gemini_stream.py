@@ -75,6 +75,7 @@ class GeminiStreamClient:
             f"- preferred_language:{lang_instruction}\n"
             f"- call_id: {self.call_id}\n"
             f"- session_start: {datetime.now(timezone.utc).isoformat()}\n"
+            f"- call_mode: LIVE TELEPHONY VOICE CALL (Keep responses strictly to 1-2 conversational sentences with natural warmth and brevity. Avoid monologues or lists).\n"
         )
         
         # Build initial history if Kiara already spoke an opening greeting

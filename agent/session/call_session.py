@@ -2,9 +2,11 @@
 Per-call conversation session state machine and sentence chunker buffer.
 """
 
+import os
 import asyncio
 import re
 from typing import AsyncGenerator, Any, Optional
+from backend.app.settings import settings
 
 class CallSession:
     """
@@ -282,6 +284,7 @@ class CallSession:
         buffer = ""
         # Regex matching end-of-sentence punctuation followed by whitespace or line break
         sentence_end_re = re.compile(r'([.?!]\s+|\n+)')
+        is_gemini_tts = (os.environ.get("TTS_PROVIDER") or getattr(settings, "TTS_PROVIDER", "elevenlabs")).strip().lower() == "gemini"
         
         try:
             async for token in token_stream:
@@ -299,9 +302,9 @@ class CallSession:
                             if filtered:
                                 print(f"[Sentence Chunker] Queuing sentence chunk: '{filtered}'")
                                 await self.tts_queue.put(filtered)
-                    elif len(buffer) >= 50 and any(p in buffer for p in [',', ';', '—']):
+                    elif not is_gemini_tts and len(buffer) >= 50 and any(p in buffer for p in [',', ';', '—']):
                         # If clause exceeds 50 chars, split at natural pause punctuation
-                        # to reduce initial TTS playback latency
+                        # to reduce initial TTS playback latency for continuous streaming models
                         best_idx = -1
                         for punct in [',', ';', '—']:
                             idx = buffer.rfind(punct)
@@ -314,6 +317,25 @@ class CallSession:
                                 filtered = self._filter_tts_chunk(chunk)
                                 if filtered:
                                     print(f"[Sentence Chunker] Queuing clause chunk: '{filtered}'")
+                                    await self.tts_queue.put(filtered)
+                            continue
+                        break
+                    elif is_gemini_tts and len(buffer) >= 180 and any(p in buffer for p in [';', '—', ',']):
+                        # For Gemini TTS, avoid slicing short conversational clauses on commas to preserve
+                        # acoustic intonation and prevent repeated startup latency. Only slice at major pause
+                        # punctuation if an individual sentence exceeds 180 characters without a sentence end.
+                        best_idx = -1
+                        for punct in [';', '—', ',']:
+                            idx = buffer.rfind(punct)
+                            if idx > best_idx and idx >= 60:
+                                best_idx = idx
+                        if best_idx != -1:
+                            chunk = buffer[:best_idx + 1].strip()
+                            buffer = buffer[best_idx + 1:]
+                            if chunk:
+                                filtered = self._filter_tts_chunk(chunk)
+                                if filtered:
+                                    print(f"[Sentence Chunker] Queuing long segment break for Gemini TTS: '{filtered}'")
                                     await self.tts_queue.put(filtered)
                             continue
                         break
