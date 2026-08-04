@@ -3,6 +3,7 @@
   "venv": "venv",
   "extraPaths": [
     ".",
-    "backend"
+    "backend",
+    "gemini-live-api-examples/gemini-live-genai-python-sdk"
   ]
 }

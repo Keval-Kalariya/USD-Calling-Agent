@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     GEMINI_TTS_VOICE: str = "Kore"
     GEMINI_TTS_TIMEOUT: float = 10.0
     TTS_PROVIDER: str = "elevenlabs"
+    PIPELINE_MODE: str = "cascaded"
+    GEMINI_LIVE_MODEL: str = "gemini-3.1-flash-live-preview"
+    GEMINI_LIVE_VOICE: str = "Puck"
 
     INTERNAL_KEY: str = "default_internal_secret_key"
     ALLOWED_NUMBERS: str = ""

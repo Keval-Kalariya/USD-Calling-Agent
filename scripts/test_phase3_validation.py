@@ -157,8 +157,8 @@ async def test_concurrent_stress_and_resources():
         
         valid = [r for r in res if isinstance(r, dict) and r.get("success")]
         failures = len(res) - len(valid)
-        avg_ttfb = (sum(r["ttfb"] for r in valid) / len(valid)) if valid else 0.0
-        avg_time = (sum(r["total"] for r in valid) / len(valid)) if valid else 0.0
+        avg_ttfb = (sum(float(r["ttfb"]) for r in valid) / len(valid)) if valid else 0.0
+        avg_time = (sum(float(r["total"]) for r in valid) / len(valid)) if valid else 0.0
         
         results_summary[level] = {"valid": len(valid), "failures": failures, "avg_ttfb": avg_ttfb, "avg_time": avg_time, "total_batch_time": elapsed}
         print(f"  -> Result ({level} calls): {len(valid)} passed, {failures} failures | Avg TTFB: {avg_ttfb:.2f}s | Avg Turn Synthesis: {avg_time:.2f}s | Batch Total: {elapsed:.2f}s")
@@ -201,6 +201,7 @@ async def test_failure_scenarios():
     print("\nTest 5B: Invalid API Key & Auth Error Catching")
     orig_key = settings.GEMINI_API_KEY
     settings.GEMINI_API_KEY = "AIzaSy_InvalidTestApiKeyForValidation"
+    client_auth = None
     try:
         client_auth = GeminiTTSStreamClient(output_format="ulaw_8000")
         err_caught = False
@@ -211,7 +212,8 @@ async def test_failure_scenarios():
         print(f"  -> Caught expected API exception: {e}")
     finally:
         settings.GEMINI_API_KEY = orig_key
-        await client_auth.finish()
+        if client_auth is not None:
+            await client_auth.finish()
         print("  -> Auth test recovered safely; pipeline stability verified.")
         
     return True
