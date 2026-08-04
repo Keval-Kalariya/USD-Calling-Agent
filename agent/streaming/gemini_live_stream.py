@@ -9,12 +9,15 @@ import json
 import asyncio
 import inspect
 import traceback
+import logging
 from typing import AsyncGenerator, Any, Optional, Callable, Dict, List
 from datetime import datetime, timezone
 
 from google import genai
 from google.genai import types as genai_types
 from backend.app.settings import settings
+
+logger = logging.getLogger(__name__)
 
 from agent.tools.check_city_coverage import check_city_coverage
 from agent.tools.capture_lead import capture_lead
@@ -272,79 +275,84 @@ class GeminiLiveStreamClient:
 
                 async def receive_loop():
                     try:
-                        async for response in session.receive():
-                            if getattr(response, "go_away", None):
-                                print(f"[Gemini Live Stream Warning] Received GoAway notice: {response.go_away}")
-                            
-                            server_content = getattr(response, "server_content", None)
-                            tool_call = getattr(response, "tool_call", None)
+                        while True:
+                            if self._closed:
+                                break
+                            async for response in session.receive():
+                                if getattr(response, "go_away", None):
+                                    print(f"[Gemini Live Stream Warning] Received GoAway notice: {response.go_away}")
+                                
+                                server_content = getattr(response, "server_content", None)
+                                tool_call = getattr(response, "tool_call", None)
 
-                            if server_content:
-                                if getattr(server_content, "model_turn", None):
-                                    for part in server_content.model_turn.parts:
-                                        if getattr(part, "inline_data", None) and part.inline_data.data:
-                                            if audio_output_callback:
-                                                if inspect.iscoroutinefunction(audio_output_callback):
-                                                    await audio_output_callback(part.inline_data.data)
-                                                else:
-                                                    audio_output_callback(part.inline_data.data)
+                                if server_content:
+                                    if getattr(server_content, "model_turn", None):
+                                        for part in server_content.model_turn.parts:
+                                            if getattr(part, "inline_data", None) and part.inline_data.data:
+                                                if audio_output_callback:
+                                                    if inspect.iscoroutinefunction(audio_output_callback):
+                                                        await audio_output_callback(part.inline_data.data)
+                                                    else:
+                                                        audio_output_callback(part.inline_data.data)
 
-                                if getattr(server_content, "input_transcription", None) and server_content.input_transcription.text:
-                                    await event_queue.put({
-                                        "type": "user",
-                                        "text": server_content.input_transcription.text
-                                    })
+                                    if getattr(server_content, "input_transcription", None) and server_content.input_transcription.text:
+                                        await event_queue.put({
+                                            "type": "user",
+                                            "text": server_content.input_transcription.text
+                                        })
 
-                                if getattr(server_content, "output_transcription", None) and server_content.output_transcription.text:
-                                    await event_queue.put({
-                                        "type": "gemini",
-                                        "text": server_content.output_transcription.text
-                                    })
+                                    if getattr(server_content, "output_transcription", None) and server_content.output_transcription.text:
+                                        await event_queue.put({
+                                            "type": "gemini",
+                                            "text": server_content.output_transcription.text
+                                        })
 
-                                if getattr(server_content, "turn_complete", False):
-                                    await event_queue.put({"type": "turn_complete"})
+                                    if getattr(server_content, "turn_complete", False):
+                                        await event_queue.put({"type": "turn_complete"})
 
-                                if getattr(server_content, "interrupted", False):
-                                    print("[Gemini Live Stream] Interruption detected by model.")
-                                    if audio_interrupt_callback:
-                                        if inspect.iscoroutinefunction(audio_interrupt_callback):
-                                            await audio_interrupt_callback()
-                                        else:
-                                            audio_interrupt_callback()
-                                    await event_queue.put({"type": "interrupted"})
-
-                            if tool_call:
-                                function_responses = []
-                                for fc in getattr(tool_call, "function_calls", []):
-                                    func_name = fc.name
-                                    args = dict(fc.args) if fc.args else {}
-                                    print(f"\n  [Gemini Live Tool Call] -> {func_name}({json.dumps(args, ensure_ascii=False)})")
-                                    
-                                    result_data = None
-                                    if func_name in self.tool_mapping:
-                                        try:
-                                            tool_func = self.tool_mapping[func_name]
-                                            if inspect.iscoroutinefunction(tool_func):
-                                                result_data = await tool_func(**args)
+                                    if getattr(server_content, "interrupted", False):
+                                        print("[Gemini Live Stream] Interruption detected by model.")
+                                        if audio_interrupt_callback:
+                                            if inspect.iscoroutinefunction(audio_interrupt_callback):
+                                                await audio_interrupt_callback()
                                             else:
-                                                result_data = await asyncio.to_thread(tool_func, **args)
-                                        except Exception as e:
-                                            print(f"  [Gemini Live Tool Exception] {e}")
-                                            result_data = {"error": f"Execution failed for {func_name}: {str(e)}"}
-                                    else:
-                                        result_data = {"error": f"Unknown tool: {func_name}"}
+                                                audio_interrupt_callback()
+                                        await event_queue.put({"type": "interrupted"})
 
-                                    print(f"  [Gemini Live Tool Result] <- {json.dumps(result_data, ensure_ascii=False, default=str)}\n")
-                                    
-                                    function_responses.append(
-                                        genai_types.FunctionResponse(
-                                            name=func_name,
-                                            id=getattr(fc, "id", None),
-                                            response={"result": json.dumps(result_data, ensure_ascii=False, default=str)}
+                                if tool_call:
+                                    function_responses = []
+                                    for fc in getattr(tool_call, "function_calls", []):
+                                        func_name = fc.name
+                                        args = dict(fc.args) if fc.args else {}
+                                        print(f"\n  [Gemini Live Tool Call] -> {func_name}({json.dumps(args, ensure_ascii=False)})")
+                                        
+                                        result_data = None
+                                        if func_name in self.tool_mapping:
+                                            try:
+                                                tool_func = self.tool_mapping[func_name]
+                                                if inspect.iscoroutinefunction(tool_func):
+                                                    result_data = await tool_func(**args)
+                                                else:
+                                                    result_data = await asyncio.to_thread(tool_func, **args)
+                                            except Exception as e:
+                                                print(f"  [Gemini Live Tool Exception] {e}")
+                                                result_data = {"error": f"Execution failed for {func_name}: {str(e)}"}
+                                        else:
+                                            result_data = {"error": f"Unknown tool: {func_name}"}
+
+                                        print(f"  [Gemini Live Tool Result] <- {json.dumps(result_data, ensure_ascii=False, default=str)}\n")
+                                        
+                                        function_responses.append(
+                                            genai_types.FunctionResponse(
+                                                name=func_name,
+                                                id=getattr(fc, "id", None),
+                                                response={"result": json.dumps(result_data, ensure_ascii=False, default=str)}
+                                            )
                                         )
-                                    )
-                                await session.send_tool_response(function_responses=function_responses)
-                                await event_queue.put({"type": "tool_call", "function_calls": [fc.name for fc in tool_call.function_calls]})
+                                    await session.send_tool_response(function_responses=function_responses)
+                                    await event_queue.put({"type": "tool_call", "function_calls": [fc.name for fc in tool_call.function_calls]})
+                            
+                            logger.debug("session.receive() iterator ended (e.g. after turn_complete); re-entering receive loop.")
 
                     except asyncio.CancelledError:
                         pass
@@ -368,7 +376,7 @@ class GeminiLiveStreamClient:
                         if event.get("type") == "error":
                             break
                 finally:
-                    print("[Gemini Live Stream] Cleaning up session IO tasks.")
+                    logger.debug("[Gemini Live Stream] Cleaning up session IO tasks.")
                     audio_task.cancel()
                     text_task.cancel()
                     recv_task.cancel()
@@ -417,7 +425,7 @@ class GeminiLiveStreamClient:
         if self._closed:
             return
         self._closed = True
-        print("[Gemini Live Stream] Finishing client operations...")
+        logger.debug("[Gemini Live Stream] Finishing client operations...")
         if self._session_task and not self._session_task.done():
             self._session_task.cancel()
             try:
