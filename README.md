@@ -16,3 +16,6 @@ Run the local dev server using `make dev` which will start FastAPI via uvicorn a
 ## Key Validation
 Before beginning Phase 1, make sure your keys are set up correctly:
 Run `backend\.venv\Scripts\python scripts\check_keys.py` to ensure all API keys are valid.
+
+## Architecture & Voice Pipeline Documentation
+For deep-dive documentation on telephony orchestration, TTS provider feature flags (ElevenLabs vs. Gemini TTS), audio transcoding, and production operations, see the [Voice Pipeline Architecture & TTS Guide](VOICE_PIPELINE_ARCHITECTURE_AND_TTS_GUIDE.md).

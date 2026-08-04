@@ -16,6 +16,7 @@ from agent.audio.codecs import mulaw_to_pcm16
 from agent.audio.vad import SileroVADStream
 from agent.streaming.deepgram_stream import DeepgramStreamClient
 from agent.streaming.elevenlabs_stream import ElevenLabsStreamClient
+from agent.streaming.gemini_tts_stream import GeminiTTSStreamClient
 from agent.streaming.gemini_stream import GeminiStreamClient
 from agent.session.call_session import CallSession
 
@@ -67,7 +68,17 @@ class VoicePipelineOrchestrator:
             on_unexpected_disconnect=self._on_dg_unexpected_disconnect,
             on_reconnect=self._on_dg_reconnected
         )
-        self.tts_client = ElevenLabsStreamClient()
+        provider = (os.environ.get("TTS_PROVIDER") or getattr(settings, "TTS_PROVIDER", "elevenlabs")).strip().lower()
+        if provider == "elevenlabs":
+            self.tts_client = ElevenLabsStreamClient()
+            self.tts_provider_name = "ElevenLabs"
+            print("[Orchestrator] TTS Provider selected: elevenlabs (using ElevenLabsStreamClient)")
+        elif provider == "gemini":
+            self.tts_client = GeminiTTSStreamClient()
+            self.tts_provider_name = "Gemini"
+            print("[Orchestrator] TTS Provider selected: gemini (using GeminiTTSStreamClient)")
+        else:
+            raise ValueError(f"Unsupported TTS_PROVIDER value: '{provider}'. Supported values are 'elevenlabs' and 'gemini'.")
         self.gemini_client = GeminiStreamClient(
             call_id=call_id,
             preferred_language="multi",
@@ -326,7 +337,7 @@ class VoicePipelineOrchestrator:
         self._active_turn_task = None
         
         # 2. Teardown streaming clients uniformly and in a deterministic order with exception isolation
-        for client_name, client in [("Deepgram STT", self.dg_client), ("Gemini LLM", self.gemini_client), ("ElevenLabs TTS", self.tts_client)]:
+        for client_name, client in [("Deepgram STT", self.dg_client), ("Gemini LLM", self.gemini_client), (f"{getattr(self, 'tts_provider_name', 'TTS')} Client", self.tts_client)]:
             if client and hasattr(client, "finish"):
                 try:
                     await client.finish()
