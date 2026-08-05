@@ -514,5 +514,17 @@
     "duration_seconds": null,
     "transcript": [],
     "status": "started"
+  },
+  "CAf91c9f5b7e95fa7d05680619d44156ce": {
+    "id": "edd33273-2688-499d-8be3-831d4771fc23",
+    "twilio_call_sid": "CAf91c9f5b7e95fa7d05680619d44156ce",
+    "direction": "outbound-api",
+    "from_number": "+16895886584",
+    "to_number": "+918758657212",
+    "started_at": "2026-08-05T06:29:44.321668+00:00",
+    "ended_at": null,
+    "duration_seconds": null,
+    "transcript": [],
+    "status": "started"
   }
 }

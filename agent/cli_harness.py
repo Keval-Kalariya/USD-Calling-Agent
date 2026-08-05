@@ -35,7 +35,7 @@ from agent.tools.check_city_coverage import check_city_coverage
 from agent.tools.get_faq import get_faq
 from agent.knowledge import get_retriever, get_guidance_retriever
 from agent.session.call_session import CallSession
-from agent.streaming.gemini_stream import _format_guidance_for_prompt
+from agent.knowledge.guidance import _format_guidance_for_prompt
 
 # ---------------------------------------------------------------------------
 # google-genai SDK (new official package: pip install google-genai)

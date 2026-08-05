@@ -84,7 +84,7 @@ async def twilio_status_callback(request: Request):
 async def twilio_media_stream(websocket: WebSocket, call_sid: str = "", opening_intent: str | None = None, lead_id: str | None = None):
     """
     Accepts bidirectional audio stream from Twilio and delegates real-time conversational
-    turns to the VoicePipelineOrchestrator (STT -> Gemini -> TTS).
+    turns to the VoicePipelineOrchestrator powered by Google Gemini Live API.
     """
     await websocket.accept()
     call_sid = call_sid or websocket.query_params.get("call_sid", "")

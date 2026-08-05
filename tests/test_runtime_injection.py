@@ -13,7 +13,7 @@ sys.path.insert(0, ROOT)
 
 from agent.knowledge import get_retriever, get_guidance_retriever
 from agent.session.call_session import CallSession
-from agent.streaming.gemini_stream import _format_guidance_for_prompt
+from agent.knowledge.guidance import _format_guidance_for_prompt
 
 
 class TestRuntimeInjection(unittest.TestCase):

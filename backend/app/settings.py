@@ -5,17 +5,8 @@ class Settings(BaseSettings):
     TWILIO_AUTH_TOKEN: str = ""
     TWILIO_NUMBER: str = ""
 
-    DEEPGRAM_API_KEY: str = ""
-    ELEVENLABS_API_KEY: str = ""
-    ELEVENLABS_VOICE_ID: str = "21m00Tcm4TlvDq8ikWAM"
-
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-3.6-flash"
-    GEMINI_TTS_MODEL: str = "models/gemini-3.1-flash-tts-preview"
-    GEMINI_TTS_VOICE: str = "Kore"
-    GEMINI_TTS_TIMEOUT: float = 10.0
-    TTS_PROVIDER: str = "elevenlabs"
-    PIPELINE_MODE: str = "cascaded"
     GEMINI_LIVE_MODEL: str = "gemini-3.1-flash-live-preview"
     GEMINI_LIVE_VOICE: str = "Puck"
 

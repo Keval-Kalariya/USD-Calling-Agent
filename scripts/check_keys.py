@@ -29,38 +29,6 @@ async def check_twilio():
         except Exception as e:
             print(f"[-] Twilio: Error - {e}")
 
-async def check_deepgram():
-    if not settings.DEEPGRAM_API_KEY:
-        print("[-] Deepgram: Missing DEEPGRAM_API_KEY")
-        return
-    url = "https://api.deepgram.com/v1/projects"
-    headers = {"Authorization": f"Token {settings.DEEPGRAM_API_KEY}"}
-    async with httpx.AsyncClient() as client:
-        try:
-            resp = await client.get(url, headers=headers)
-            if resp.status_code == 200:
-                print("[+] Deepgram: OK")
-            else:
-                print(f"[-] Deepgram: Failed ({resp.status_code}) - {resp.text.strip()}")
-        except Exception as e:
-            print(f"[-] Deepgram: Error - {e}")
-
-async def check_elevenlabs():
-    if not settings.ELEVENLABS_API_KEY:
-        print("[-] ElevenLabs: Missing ELEVENLABS_API_KEY")
-        return
-    url = "https://api.elevenlabs.io/v1/models"
-    headers = {"xi-api-key": settings.ELEVENLABS_API_KEY}
-    async with httpx.AsyncClient() as client:
-        try:
-            resp = await client.get(url, headers=headers)
-            if resp.status_code == 200:
-                print("[+] ElevenLabs: OK")
-            else:
-                print(f"[-] ElevenLabs: Failed ({resp.status_code}) - {resp.text.strip()}")
-        except Exception as e:
-            print(f"[-] ElevenLabs: Error - {e}")
-
 async def check_gemini():
     if not settings.GEMINI_API_KEY:
         print("[-] Gemini: Missing GEMINI_API_KEY")
@@ -84,8 +52,6 @@ async def main():
     
     await asyncio.gather(
         check_twilio(),
-        check_deepgram(),
-        check_elevenlabs(),
         check_gemini()
     )
     print("\nDiagnostic complete.")

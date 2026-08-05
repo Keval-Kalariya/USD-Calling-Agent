@@ -5,13 +5,12 @@ Per-call conversation session state machine and sentence chunker buffer.
 import os
 import asyncio
 import re
-from typing import AsyncGenerator, Any, Optional
-from backend.app.settings import settings
+from typing import Any, Optional
 
 class CallSession:
     """
     Manages state transitions (listening, thinking, speaking), conversation history,
-    transcript buffers, and sentence boundary chunking between Gemini and TTS.
+    and transcript buffers for real-time Gemini Live interactions.
     Also owns Layer 3 conversational memory, mutable preferred language, and session state.
     """
     def __init__(self, call_id: str, opening_intent: str | None = None, lead_id: str | None = None, preferred_language: str = "en"):
@@ -41,10 +40,6 @@ class CallSession:
         
         # Chronological record of confirmed conversational turns for logging
         self.conversation_history: list[dict[str, Any]] = []
-        
-        # Queue buffering sentence-bounded text chunks for TTS consumption
-        # A value of None acts as an end-of-turn sentinel
-        self.tts_queue: asyncio.Queue[str | None] = asyncio.Queue()
         
         # Turn tracking for future barge-in cancellation guards
         self.current_turn_id: int = 0
@@ -136,7 +131,7 @@ class CallSession:
 
     def append_stt_fragment(self, text: str, is_final: bool = False) -> None:
         """
-        Receives live transcription fragments from Deepgram.
+        Receives live transcription fragments from voice streams.
         Partial transcripts only update interim buffer without replacing finalized text.
         Final transcripts append to confirmed history and overwrite pending interim text.
         """
@@ -234,127 +229,3 @@ class CallSession:
             text = self.get_merged_transcript(include_interim=True)
         self.clear_transcripts()
         return text
-
-    def _filter_tts_chunk(self, chunk: str) -> str | None:
-        """
-        Filters out unnatural phonetic vocal hesitations and isolated filler chunks
-        before sending text to ElevenLabs TTS synthesis.
-        """
-        if not chunk:
-            return None
-
-        filler_pattern = re.compile(r'^\s*(uh+|umm+|um+|ah+|eh+|hmm+)(?=[,.~!?—\s]|$)[,.~!?—\s]*', re.IGNORECASE)
-        original_chunk = chunk
-        removed_tokens = []
-        cleaned_chunk = chunk.strip()
-        
-        while True:
-            match = filler_pattern.match(cleaned_chunk)
-            if not match:
-                break
-            token = match.group(1).lower()
-            removed_tokens.append(token)
-            cleaned_chunk = filler_pattern.sub('', cleaned_chunk).strip()
-            
-        if removed_tokens:
-            # Check if remaining text has any semantic word characters
-            if not re.sub(r'\W+', '', cleaned_chunk):
-                print(f"[TTS Filter] Dropped isolated filler chunk.")
-                return None
-            else:
-                for token in removed_tokens:
-                    print(f"[TTS Filter] Removed hesitation token: \"{token}\"")
-                # Capitalize first character of cleaned utterance to retain proper sentence structure
-                if cleaned_chunk and cleaned_chunk[0].islower():
-                    cleaned_chunk = cleaned_chunk[0].upper() + cleaned_chunk[1:]
-                return cleaned_chunk
-                
-        # Also safeguard against purely empty or symbol-only non-word chunks
-        if not re.sub(r'\W+', '', cleaned_chunk):
-            return None
-
-        return cleaned_chunk
-
-    async def buffer_gemini_to_tts_queue(self, token_stream: AsyncGenerator[str, None]) -> None:
-        """
-        Consumes Gemini token streaming, accumulates text, and splits at natural sentence
-        or clause boundaries before putting complete sentences into `tts_queue`.
-        This enables low latency TTS start without choppy pauses between words.
-        """
-        buffer = ""
-        # Regex matching end-of-sentence punctuation followed by whitespace or line break
-        sentence_end_re = re.compile(r'([.?!]\s+|\n+)')
-        is_gemini_tts = (os.environ.get("TTS_PROVIDER") or getattr(settings, "TTS_PROVIDER", "elevenlabs")).strip().lower() == "gemini"
-        
-        try:
-            async for token in token_stream:
-                buffer += token
-                
-                # Continuously check buffer for sentence boundaries
-                while True:
-                    match = sentence_end_re.search(buffer)
-                    if match:
-                        end_idx = match.end()
-                        chunk = buffer[:end_idx].strip()
-                        buffer = buffer[end_idx:]
-                        if chunk:
-                            filtered = self._filter_tts_chunk(chunk)
-                            if filtered:
-                                print(f"[Sentence Chunker] Queuing sentence chunk: '{filtered}'")
-                                await self.tts_queue.put(filtered)
-                    elif not is_gemini_tts and len(buffer) >= 50 and any(p in buffer for p in [',', ';', '—']):
-                        # If clause exceeds 50 chars, split at natural pause punctuation
-                        # to reduce initial TTS playback latency for continuous streaming models
-                        best_idx = -1
-                        for punct in [',', ';', '—']:
-                            idx = buffer.rfind(punct)
-                            if idx > best_idx and idx >= 20:
-                                best_idx = idx
-                        if best_idx != -1:
-                            chunk = buffer[:best_idx + 1].strip()
-                            buffer = buffer[best_idx + 1:]
-                            if chunk:
-                                filtered = self._filter_tts_chunk(chunk)
-                                if filtered:
-                                    print(f"[Sentence Chunker] Queuing clause chunk: '{filtered}'")
-                                    await self.tts_queue.put(filtered)
-                            continue
-                        break
-                    elif is_gemini_tts and len(buffer) >= 180 and any(p in buffer for p in [';', '—', ',']):
-                        # For Gemini TTS, avoid slicing short conversational clauses on commas to preserve
-                        # acoustic intonation and prevent repeated startup latency. Only slice at major pause
-                        # punctuation if an individual sentence exceeds 180 characters without a sentence end.
-                        best_idx = -1
-                        for punct in [';', '—', ',']:
-                            idx = buffer.rfind(punct)
-                            if idx > best_idx and idx >= 60:
-                                best_idx = idx
-                        if best_idx != -1:
-                            chunk = buffer[:best_idx + 1].strip()
-                            buffer = buffer[best_idx + 1:]
-                            if chunk:
-                                filtered = self._filter_tts_chunk(chunk)
-                                if filtered:
-                                    print(f"[Sentence Chunker] Queuing long segment break for Gemini TTS: '{filtered}'")
-                                    await self.tts_queue.put(filtered)
-                            continue
-                        break
-                    else:
-                        break
-            
-            # Flush any remaining text in the buffer once Gemini finishes generating
-            remaining = buffer.strip()
-            if remaining:
-                filtered = self._filter_tts_chunk(remaining)
-                if filtered:
-                    print(f"[Sentence Chunker] Queuing trailing chunk: '{filtered}'")
-                    await self.tts_queue.put(filtered)
-                
-        except asyncio.CancelledError:
-            print("[Sentence Chunker] Task cancelled during stream.")
-            raise
-        except Exception as e:
-            print(f"[Sentence Chunker Error] Unexpected error during token grouping: {e}")
-        finally:
-            # Emit sentinel to inform TTS consumer that turn generation is complete
-            await self.tts_queue.put(None)

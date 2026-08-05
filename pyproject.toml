@@ -10,10 +10,7 @@ requires-python = ">=3.11"
 dependencies = [
     "fastapi",
     "uvicorn",
-    "pipecat-ai",
     "twilio",
-    "deepgram-sdk",
-    "elevenlabs",
     "openai",
     "anthropic",
     "google-generativeai",

@@ -230,3 +230,12 @@ def get_guidance_retriever() -> GuidanceRetriever:
     if _default_guidance_retriever is None:
         _default_guidance_retriever = GuidanceRetriever()
     return _default_guidance_retriever
+
+
+def _format_guidance_for_prompt(guidance_results: list, **kwargs) -> str:
+    """
+    Concatenates preformatted, runtime-ready conversational guidance strings.
+    Performs zero parsing, formatting, or cleanup at runtime, relying entirely on
+    the clean content field generated during startup indexing.
+    """
+    return "\n\n".join(r["content"] for r in guidance_results if r.get("content"))
